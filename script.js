@@ -19,3 +19,11 @@ button.style.background = '';
 }, 2000);
 });
 });
+document.getElementById('feedback-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    document.getElementById('form-message').textContent = 'Thanks for your feedback!';
+    document.getElementById('form-message').style.display = 'block';
+    this.reset();
+});
+
+
