@@ -51,5 +51,53 @@ document.getElementById('feedback-form').addEventListener('submit', function(e) 
     setTimeout(() => { message.style.display = 'none'; }, 5000);
 });
 
+// Track Google Forms iframe submission
+(function() {
+    const iframe = document.querySelector('iframe[src*="google.com/forms"]'); // Your Google Form iframe
+    
+    if (!iframe) return;
+    
+    let originalHeight = iframe.offsetHeight;
+    let submitDetected = false;
+    
+    // Watch for iframe changes (submit success)
+    const observer = new MutationObserver(() => {
+        if (submitDetected) return;
+        
+        const newHeight = iframe.offsetHeight;
+        const heightChange = Math.abs((newHeight - originalHeight) / originalHeight * 100);
+        
+        // Submit detected (height changes 30%+)
+        if (heightChange > 30 || !iframe.contentWindow) {
+            submitDetected = true;
+            observer.disconnect();
+            
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                'event': 'google_forms_submit',
+                'form_type': 'iframe_customer_feedback',
+                'timestamp': new Date().toISOString()
+            });
+            
+            console.log('✅ Google Forms submit tracked!');
+        }
+    });
+    
+    observer.observe(iframe, { attributes: true, childList: true, subtree: true });
+    
+    // Also detect iframe removal (redirect)
+    const checkIframeGone = setInterval(() => {
+        if (!document.body.contains(iframe) && !submitDetected) {
+            clearInterval(checkIframeGone);
+            window.dataLayer.push({
+                'event': 'google_forms_submit',
+                'form_type': 'iframe_customer_feedback',
+                'detection_method': 'iframe_removed'
+            });
+        }
+    }, 500);
+    
+})();
+
 
 
