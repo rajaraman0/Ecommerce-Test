@@ -19,11 +19,37 @@ button.style.background = '';
 }, 2000);
 });
 });
+// Enhanced form submission with dataLayer push
 document.getElementById('feedback-form').addEventListener('submit', function(e) {
     e.preventDefault();
-    document.getElementById('form-message').textContent = 'Thanks for your feedback!';
-    document.getElementById('form-message').style.display = 'block';
+    
+    // Capture form values
+    const formData = {
+        name: document.getElementById('name').value,
+        rating: document.getElementById('rating').value,
+        comments: document.getElementById('comments').value,
+        formType: 'customer_feedback',
+        timestamp: new Date().toISOString()
+    };
+    
+    // Push to dataLayer (GTM ready)
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+        'event': 'feedback_submit',
+        'feedback_name': formData.name,
+        'feedback_rating': formData.rating,
+        'feedback_comments': formData.comments,
+        'form_type': formData.formType
+    });
+    
+    // User feedback
+    const message = document.getElementById('form-message');
+    message.textContent = 'Thank you! Feedback submitted.';
+    message.style.color = 'green';
+    message.style.display = 'block';
     this.reset();
+    setTimeout(() => { message.style.display = 'none'; }, 5000);
 });
+
 
 
