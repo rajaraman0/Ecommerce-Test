@@ -50,54 +50,38 @@ document.getElementById('feedback-form').addEventListener('submit', function(e) 
     this.reset();
     setTimeout(() => { message.style.display = 'none'; }, 5000);
 });
+let currentFormUrl = '';
+setInterval(() => {
+    const iframe = document.querySelector('iframe[src*="google.com/forms"]');
+    if (iframe && iframe.src !== currentFormUrl) {
+        currentFormUrl = iframe.src;
+        
+        // Thank-you page = success! (contains /viewform → /submitted)
+        if (iframe.src.includes('submitted') || iframe.src.includes('formResponse')) {
+            window.dataLayer.push({
+                'event': 'google_forms_submit',
+                'form_type': 'iframe_success'
+            });
+        }
+    }
+}, 1000);
+// Detect thank-you page height increase
+const iframe = document.querySelector('iframe[src*="google.com/forms"]');
+let initialHeight = iframe ? iframe.offsetHeight : 0;
 
-// Track Google Forms iframe submission
-(function() {
-    const iframe = document.querySelector('iframe[src*="https://docs.google.com/forms/d/e/1FAIpQLScnvS4kKN0skYrkXUaCFzRAPjKS4vXfIXyUkHb3dNuo4E9lkQ/viewform?usp=dialog"]'); // Your Google Form iframe
-    
-    if (!iframe) return;
-    
-    let originalHeight = iframe.offsetHeight;
-    let submitDetected = false;
-    
-    // Watch for iframe changes (submit success)
-    const observer = new MutationObserver(() => {
-        if (submitDetected) return;
-        
-        const newHeight = iframe.offsetHeight;
-        const heightChange = Math.abs((newHeight - originalHeight) / originalHeight * 100);
-        
-        // Submit detected (height changes 30%+)
-        if (heightChange > 30 || !iframe.contentWindow) {
-            submitDetected = true;
-            observer.disconnect();
-            
-            window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({
-                'event': 'google_forms_submit',
-                'form_type': 'iframe_customer_feedback',
-                'timestamp': new Date().toISOString()
-            });
-            
-            console.log('✅ Google Forms submit tracked!');
-        }
-    });
-    
-    observer.observe(iframe, { attributes: true, childList: true, subtree: true });
-    
-    // Also detect iframe removal (redirect)
-    const checkIframeGone = setInterval(() => {
-        if (!document.body.contains(iframe) && !submitDetected) {
-            clearInterval(checkIframeGone);
-            window.dataLayer.push({
-                'event': 'google_forms_submit',
-                'form_type': 'iframe_customer_feedback',
-                'detection_method': 'iframe_removed'
-            });
-        }
-    }, 500);
-    
-})();
+setInterval(() => {
+    if (iframe && iframe.offsetHeight > initialHeight * 1.3) { // 30% taller
+        window.dataLayer.push({'event': 'google_forms_submit'});
+    }
+}, 500);
+window.addEventListener('message', (event) => {
+    if (event.origin.includes('google.com') && 
+        (event.data === 'submit' || event.data.formSubmitted)) {
+        window.dataLayer.push({'event': 'google_forms_submit'});
+    }
+});
+
+
 
 
 
