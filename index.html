@@ -123,14 +123,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section> <!-- End of products -->
 
     <!-- NEW: Forms at bottom -->
-    <section id="feedback" class="feedback-section">
-        <h2>Customer Satisfaction Survey</h2>
-        <div class="form-container">
-            <h3>Via Iframe (Google Forms)</h3>
-            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScnvS4kKN0skYrkXUaCFzRAPjKS4vXfIXyUkHb3dNuo4E9lkQ/viewform?usp=dialog" width="100%" height="600" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
-            <p><small>Get embed: <a href="https://forms.google.com" target="_blank">Google Forms</a> → Send → Embed.</small></p>
-        </div>
-        <div class="form-container">
+    <iframe id="cross-domain-form" 
+        src="https://your-cross-domain.github.io/form.html" 
+        width="100%" height="600" 
+        frameborder="0" style="border-radius:10px;">
+</iframe>
+
+<script>
+// Listen for cross-domain messages
+window.addEventListener('message', function(event) {
+    // Verify origin (security!)
+    if (event.origin !== 'https://your-cross-domain.github.io') return;
+    
+    const data = event.data;
+    if (data.event === 'form_submit') {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+            'event': 'cross_domain_submit',
+            'form_name': data.form_name,
+            'name': data.name,
+            'rating': data.rating,
+            'cross_domain': true
+        });
+        console.log('✅ Cross-domain form tracked:', data);
+    }
+});
+</script>
+
             <h3>Direct HTML Form</h3>
             <form id="feedback-form" class="native-form">
                 <label for="name">Name:</label><input type="text" id="name" name="name" required><br>
@@ -157,6 +176,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
