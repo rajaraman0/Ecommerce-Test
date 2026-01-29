@@ -133,7 +133,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 // Listen for cross-domain messages
 window.addEventListener('message', function(event) {
     // Verify origin (security!)
-    if (event.origin !== 'https://rajaraman0.github.io/Cross-Domain-Form-1/') return;
+    if (event.origin !== 'https://rajaraman0.github.io/Cross-Domain-Form/') return;
     
     const data = event.data;
     if (data.event === 'form_submit') {
@@ -176,6 +176,7 @@ window.addEventListener('message', function(event) {
     <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
