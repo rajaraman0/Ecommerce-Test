@@ -97,7 +97,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <p class="price">$39.99</p>
             <button class="add-to-cart">Add to Cart</button>
         </div>
-    </section>
     </section> <!-- End of products -->
 
          <div class="form-container">
@@ -112,7 +111,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
        <script>
         window.addEventListener('message', function(event) {
             console.log('DEBUG:', event.origin, event.data)
-            if (event.origin !== 'https://rajaraman0.github.io/Cross-Domain-Form') return;
+            if (event.origin !== 'https://rajaraman0.github.io') return;
             const data = event.data;
             if (data.event === 'form_submit') {
                 window.dataLayer = window.dataLayer || [];
@@ -154,6 +153,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
