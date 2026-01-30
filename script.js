@@ -31,8 +31,7 @@ document.getElementById('feedback-form').addEventListener('submit', function(e) 
         formType: 'customer_feedback',
         timestamp: new Date().toISOString()
     };
-    const message = document.getElementById('form-message');
-    const thankYouMessage = 'Thank you! Feedback submitted.';
+
         // Push to dataLayer (GTM ready)
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
@@ -40,16 +39,23 @@ document.getElementById('feedback-form').addEventListener('submit', function(e) 
         'feedback_name': formData.name,
         'feedback_rating': formData.rating,
         'feedback_comments': formData.comments,
-        'form_type': formData.formType,
-        'form_message': Thank you! Feedback submitted.
+        'form_type': formData.formTyp
     });
     // User feedback
-  
+      const message = document.getElementById('form-message');
+    const thankYouMessage = 'Thank you! Feedback submitted.';
     message.textContent = 'Thank you! Feedback submitted.';
     message.style.color = 'green';
     message.style.display = 'block';
     this.reset();
     setTimeout(() => { message.style.display = 'none'; }, 5000);
+};
+    // Push to dataLayer (GTM ready)
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+        'event': 'feedback_form_Complete',
+        'feedback_message': "Thank you! Feedback submitted."
+    
 });
 let currentFormUrl = '';
 setInterval(() => {
@@ -81,6 +87,7 @@ window.addEventListener('message', (event) => {
         window.dataLayer.push({'event': 'google_forms_submit'});
     }
 });
+
 
 
 
