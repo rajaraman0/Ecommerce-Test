@@ -111,6 +111,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
        <script>
         window.addEventListener('message', function(event) {
+            console.log('DEBUG:', event.origin, event.data)
             if (event.origin !== 'https://rajaraman0.github.io/Cross-Domain-Form') return;
             const data = event.data;
             if (data.event === 'form_submit') {
@@ -153,6 +154,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
