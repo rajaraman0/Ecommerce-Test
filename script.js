@@ -44,11 +44,18 @@ document.getElementById('feedback-form').addEventListener('submit', function(e) 
     
     // User feedback
     const message = document.getElementById('form-message');
+    const formMessage = {
     message.textContent = 'Thank you! Feedback submitted.';
     message.style.color = 'green';
     message.style.display = 'block';
     this.reset();
     setTimeout(() => { message.style.display = 'none'; }, 5000);
+    };
+     window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+        'event': 'feedback_submit_Completion',
+        'feedback_message': formMessage.textContent,
+    });
 });
 let currentFormUrl = '';
 setInterval(() => {
@@ -80,6 +87,7 @@ window.addEventListener('message', (event) => {
         window.dataLayer.push({'event': 'google_forms_submit'});
     }
 });
+
 
 
 
