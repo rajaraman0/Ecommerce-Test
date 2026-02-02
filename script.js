@@ -41,18 +41,18 @@ document.getElementById('feedback-form').addEventListener('submit', function(e) 
         'feedback_comments': formData.comments,
         'form_type': formData.formType
     });
+
+    // Push to GTM first
+window.dataLayer = window.dataLayer || [];
+window.dataLayer.push({
+    'event': 'feedback_submit_Completion',
+    'feedback_message': message.textContent,
     
     // User feedback
 const message = document.getElementById('form-message');
 message.textContent = 'Thank you! Feedback submitted.';
 message.style.color = 'green';
 message.style.display = 'block';
-
-// Push to GTM first
-window.dataLayer = window.dataLayer || [];
-window.dataLayer.push({
-    'event': 'feedback_submit_Completion',
-    'feedback_message': message.textContent,
 });
 
 // Then reset the form
@@ -91,6 +91,7 @@ window.addEventListener('message', (event) => {
         window.dataLayer.push({'event': 'google_forms_submit'});
     }
 });
+
 
 
 
